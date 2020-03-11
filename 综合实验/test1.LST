@@ -1,0 +1,163 @@
+C51 COMPILER V9.01   TEST1                                                                 12/14/2019 19:39:18 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE TEST1
+OBJECT MODULE PLACED IN test1.OBJ
+COMPILER INVOKED BY: D:\keil\C51\BIN\C51.EXE test1.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include "reg51.h"
+   2          
+   3          #define SBM   0x80                //识别码
+   4          #define m_9    (65536-9000)           //约9mS
+   5          #define m_45  (65536-4500)            //约4.5mS
+   6          #define m_68  (65536-1680)            //约1.68mS
+   7          #define m_56  (65536-560)             //约0.56mS
+   8          #define m_40   (65536-40000)       //约40mS
+   9          
+  10          typedef unsigned char uchar;
+  11          typedef unsigned int uint; 
+  12          uint key_val;
+  13          sbit IR = P3^0;                           //定义发射引脚（接PNP三极管基极）
+  14          uint code smg[]={0xc0,0xf9,0xa4,0xb0,0x99,0x92,0x82,0xf8,0x80,0x90,0x88,0x83,0xc6,0xa1,0x86,0x8e};
+  15          void delay(uchar ms)
+  16          {
+  17   1              while(ms--);
+  18   1      }
+  19          
+  20          void key_scan()
+  21          {
+  22   1              int a=0;
+  23   1              P1=0x0f;
+  24   1              if(P1!=0x0f)  //按键按下
+  25   1              {
+  26   2                      delay(1000);
+  27   2                       if(P1!=0x0f)
+  28   2                       {
+  29   3                              P1=0x0f;
+  30   3                              switch(P1)
+  31   3                              {
+  32   4                                      case 0x0d:key_val=0;break;
+  33   4                                      case 0x0b:key_val=1;break;
+  34   4                                      case 0x07:key_val=2;break;
+  35   4                              }
+  36   3                              delay(10);
+  37   3                              P1=0xf0;
+  38   3                              switch(P1)
+  39   3                              {
+  40   4                                      case 0xe0:key_val+=0;break;
+  41   4                                      case 0xd0:key_val+=3;break;
+  42   4                                      case 0xb0:key_val+=6;break;
+  43   4                                      case 0x70:key_val+=9;break;
+  44   4                              }
+  45   3                      }
+  46   2      
+  47   2              }
+  48   1      
+  49   1      }
+  50          
+  51          void T0_delay(bit BT,uint x)
+  52          {
+  53   1        TH0 = x>>8;               //输入T0初始值
+  54   1        TL0 = x;
+  55   1        TF0=0;                                //清0
+C51 COMPILER V9.01   TEST1                                                                 12/14/2019 19:39:18 PAGE 2   
+
+  56   1        TR0=1;                                //启动定时器0
+  57   1        if(BT == 0) while(!TF0);      //BT=0时不发射38KHz脉冲只延时；BT=1发射38KHz脉冲且延时；
+  58   1        else while(1)                     //38KHz脉冲，占空比5:26
+  59   1               {
+  60   2                        IR = 0;
+  61   2                        if(TF0)break;
+  62   2                    if(TF0)break;
+  63   2                        IR = 1;
+  64   2                    if(TF0)break;
+  65   2                    if(TF0)break;
+  66   2                    if(TF0)break;
+  67   2                        if(TF0)break;
+  68   2                    if(TF0)break;
+  69   2                    if(TF0)break;
+  70   2                    if(TF0)break;
+  71   2                    if(TF0)break;
+  72   2                    if(TF0)break;
+  73   2                        if(TF0)break;
+  74   2                       }
+  75   1        TR0=0;                                //关闭定时器0
+  76   1        TF0=0;                                //标志位溢出则清0
+  77   1      
+  78   1        IR =1;                                //脉冲停止后，发射端口常态为高电平
+  79   1      }
+  80          
+  81          void send_one_byte(uchar data1)
+  82          {
+  83   1              uchar i;
+  84   1              for(i=0;i<8;i++)
+  85   1              {
+  86   2                       T0_delay(1,m_56);    //高电平0.56ms
+  87   2                       if(data1&0x01)
+  88   2                              T0_delay(0,m_68);        // 1
+  89   2                       else
+  90   2                              T0_delay(0,m_56);        // 0
+  91   2                       data1>>=1;
+  92   2              }
+  93   1      }
+  94          
+  95          void send_msg(uchar data1)
+  96          {
+  97   1              T0_delay(1,m_9);
+  98   1              T0_delay(0,m_45);      //引导吗
+  99   1      
+ 100   1              send_one_byte(SBM);
+ 101   1              send_one_byte(~SBM);
+ 102   1              send_one_byte(data1);
+ 103   1              send_one_byte(~data1);
+ 104   1      
+ 105   1              T0_delay(1,m_56);         //结束吗
+ 106   1              T0_delay(0,m_40);
+ 107   1      
+ 108   1      }
+ 109          
+ 110          
+ 111          int main()
+ 112          {
+ 113   1      
+ 114   1              uint p_val;
+ 115   1              TMOD = 0x01;         //T0 16位工作方式
+ 116   1              
+ 117   1      
+C51 COMPILER V9.01   TEST1                                                                 12/14/2019 19:39:18 PAGE 3   
+
+ 118   1              while(1)
+ 119   1              {
+ 120   2                      key_scan();
+ 121   2                      IR=1;                           //发射端口常态为高电平
+ 122   2                      if(p_val!=key_val)
+ 123   2                      {
+ 124   3      
+ 125   3                              p_val=key_val;  
+ 126   3                              P2=smg[key_val];
+ 127   3                              delay(20);
+ 128   3                              send_msg(key_val);
+ 129   3                      }
+ 130   2                                                         
+ 131   2                      
+ 132   2                      
+ 133   2              }
+ 134   1      }
+ 135          
+ 136          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    351    ----
+   CONSTANT SIZE    =     32    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      2       6
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----       1
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

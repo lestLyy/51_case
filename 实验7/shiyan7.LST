@@ -1,0 +1,279 @@
+C51 COMPILER V9.01   SHIYAN7                                                               03/12/2020 00:39:24 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE SHIYAN7
+OBJECT MODULE PLACED IN shiyan7.OBJ
+COMPILER INVOKED BY: D:\keil\C51\BIN\C51.EXE shiyan7.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          
+   2          #include <reg52.H>
+   3          #include <intrins.H>
+   4          #include <math.H>
+   5          
+   6          #define uchar unsigned char
+   7           #define uint unsigned int
+   8           sbit dula = P2^6;
+   9           sbit wela = P2^7;
+  10           sbit rw = P3^6; 
+  11           sbit RS = P3^5;  
+  12           sbit beep=P2^0; 
+  13           sbit LCDEN = P3^4; 
+  14          
+  15          void delayUs()
+  16          {
+  17   1          _nop_();
+  18   1      }
+  19          
+  20           void delayMs(uint a)
+  21          {
+  22   1          uint i, j;
+  23   1          for(i = a; i > 0; i--)
+  24   1              for(j = 100; j > 0; j--);
+  25   1       }
+  26          
+  27          
+  28          void writeComm(uchar comm)
+  29          {
+  30   1           RS = 0;    
+  31   1          P0 = comm;
+  32   1          LCDEN = 1;
+  33   1           delayUs();
+  34   1          LCDEN = 0;
+  35   1          delayMs(1);
+  36   1      }
+  37          
+  38          //写数据:RS=1, RW=0;
+  39          void writeData(uchar dat)
+  40          {
+  41   1           RS = 1;
+  42   1           P0 = dat;
+  43   1           LCDEN = 1;
+  44   1          delayUs();
+  45   1          LCDEN = 0;
+  46   1          delayMs(1);
+  47   1       }
+  48          
+  49          
+  50           void init()
+  51           {
+  52   1           rw = 0; 
+  53   1           dula = wela = 0;
+  54   1          writeComm(0x38);
+  55   1         writeComm(0x0c); 
+C51 COMPILER V9.01   SHIYAN7                                                               03/12/2020 00:39:24 PAGE 2   
+
+  56   1          writeComm(0x06);
+  57   1          writeComm(0x01); 
+  58   1      }
+  59          
+  60          void writeString(uchar * str, uchar length)
+  61          {
+  62   1           uchar i;
+  63   1          for(i = 0; i < length; i++)
+  64   1          {
+  65   2               writeData(str[i]);
+  66   2           }
+  67   1       }
+  68           
+  69          /**//*****************************DS18B20*******************************/
+  70          sbit ds = P2^2;
+  71          void dsInit()
+  72           {
+  73   1          
+  74   1          unsigned int i;  
+  75   1          ds = 0;
+  76   1          i = 100;  
+  77   1           while(i>0) i--;
+  78   1          ds = 1;   
+  79   1          i = 4;
+  80   1           while(i>0) i--;
+  81   1       }
+  82           
+  83          void dsWait()
+  84           {
+  85   1            unsigned int i;
+  86   1            while(ds);  
+  87   1            while(~ds);
+  88   1            i = 4;
+  89   1            while(i > 0) i--;
+  90   1      }
+  91          
+  92          
+  93          bit readBit()
+  94          {
+  95   1          unsigned int i;
+  96   1          bit b;
+  97   1          ds = 0;
+  98   1          i++;   
+  99   1          ds = 1; 
+ 100   1         i++; i++;  
+ 101   1          b = ds;
+ 102   1          i = 8; 
+ 103   1          while(i>0) i--;
+ 104   1          return b;
+ 105   1      }
+ 106          
+ 107          unsigned char readByte()
+ 108          {
+ 109   1          unsigned int i;
+ 110   1          unsigned char j, dat;
+ 111   1         dat = 0;
+ 112   1          for(i=0; i<8; i++)
+ 113   1          {
+ 114   2              j = readBit();
+ 115   2            
+ 116   2              dat = (j << 7) | (dat >> 1);
+ 117   2          }
+C51 COMPILER V9.01   SHIYAN7                                                               03/12/2020 00:39:24 PAGE 3   
+
+ 118   1          return dat;
+ 119   1      }
+ 120          
+ 121          
+ 122          void writeByte(unsigned char dat)
+ 123          {
+ 124   1          unsigned int i;
+ 125   1          unsigned char j;
+ 126   1          bit b;
+ 127   1          for(j = 0; j < 8; j++)
+ 128   1          {
+ 129   2              b = dat & 0x01;
+ 130   2              dat >>= 1;
+ 131   2          
+ 132   2              if(b)   
+ 133   2              {
+ 134   3                 ds = 0;          i++; i++;  
+ 135   3                  ds = 1;    
+ 136   3                  i = 8; while(i>0) i--;  
+ 137   3              }
+ 138   2              else  
+ 139   2              {
+ 140   3                  ds = 0;
+ 141   3                i = 8; while(i>0) i--;  
+ 142   3                  ds = 1;
+ 143   3                 i++; i++;
+ 144   3              }
+ 145   2         }
+ 146   1      }
+ 147          
+ 148          
+ 149          void sendChangeCmd()
+ 150          {
+ 151   1          dsInit();    
+ 152   1          dsWait();   
+ 153   1          delayMs(1);    
+ 154   1          writeByte(0xcc);
+ 155   1          writeByte(0x44);
+ 156   1      }
+ 157          
+ 158          void sendReadCmd()
+ 159          {
+ 160   1          dsInit();
+ 161   1          dsWait();
+ 162   1          delayMs(1);
+ 163   1          writeByte(0xcc); 
+ 164   1          writeByte(0xbe); 
+ 165   1      }
+ 166          
+ 167          
+ 168          int getTmpValue()
+ 169          {
+ 170   1          unsigned int tmpvalue;
+ 171   1          int value; 
+ 172   1          float t;
+ 173   1          unsigned char low, high;
+ 174   1          sendReadCmd();
+ 175   1          
+ 176   1          low = readByte(); 
+ 177   1          high = readByte();
+ 178   1         
+ 179   1          tmpvalue = high;
+C51 COMPILER V9.01   SHIYAN7                                                               03/12/2020 00:39:24 PAGE 4   
+
+ 180   1          tmpvalue <<= 8;
+ 181   1          tmpvalue |= low;
+ 182   1          value = tmpvalue;
+ 183   1          
+ 184   1        
+ 185   1          t = value * 0.0625;
+ 186   1          
+ 187   1          value = t * 10 + (value > 0 ? 0.5 : -0.5); //大于0加0.5, 小于0减0.5
+ 188   1          return value;
+ 189   1      }
+ 190          void music()
+ 191          {
+ 192   1              beep=0;
+ 193   1              delayMs(100);
+ 194   1              beep=1;
+ 195   1              delayMs(100);
+ 196   1      }
+ 197          void display(int v) 
+ 198          {
+ 199   1          unsigned char count;
+ 200   1          unsigned char datas[] = {0, 0, 0, 0};
+ 201   1          unsigned int tmp = abs(v);
+ 202   1          datas[0] = tmp / 1000;
+ 203   1          datas[1] = tmp % 1000 / 100;
+ 204   1          datas[2] = tmp % 100 / 10;
+ 205   1          datas[3] = tmp % 10;
+ 206   1          writeComm(0xc0+3);
+ 207   1          if(v < 0)
+ 208   1          {
+ 209   2              writeString("- ", 2);
+ 210   2                      music();
+ 211   2         }
+ 212   1          else
+ 213   1          {
+ 214   2             writeString("+ ", 2);
+ 215   2                 if(v>990)
+ 216   2                              music();
+ 217   2          }
+ 218   1      
+ 219   1          if(datas[0] != 0)
+ 220   1          {
+ 221   2              writeData('0'+datas[0]);
+ 222   2          }
+ 223   1          for(count = 1; count != 4; count++)
+ 224   1          {
+ 225   2              writeData('0'+datas[count]);
+ 226   2              if(count == 2)
+ 227   2              {
+ 228   3                  writeData('.');
+ 229   3              }
+ 230   2          }
+ 231   1      }
+ 232          /**//*****************************DS18B20*******************************/
+ 233          
+ 234          void main()
+ 235          {
+ 236   1          uchar table[] = "  temperature: ";
+ 237   1          sendChangeCmd();
+ 238   1          init();
+ 239   1          writeComm(0x80);
+ 240   1          writeString(table, 16);
+ 241   1          while(1)
+C51 COMPILER V9.01   SHIYAN7                                                               03/12/2020 00:39:24 PAGE 5   
+
+ 242   1          {
+ 243   2              delayMs(1000); //温度转换时间需要750ms以上
+ 244   2              writeComm(0xc0);
+ 245   2              display(getTmpValue());
+ 246   2              sendChangeCmd();
+ 247   2          }
+ 248   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    741    ----
+   CONSTANT SIZE    =     26    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      33
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----       2
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,4 @@
+"STARTUP.obj",
+"shiyan.obj" 
+TO "shiyan6" 
+RAMSIZE(256) 

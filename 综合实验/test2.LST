@@ -1,0 +1,148 @@
+C51 COMPILER V9.01   TEST2                                                                 12/14/2019 20:53:18 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE TEST2
+OBJECT MODULE PLACED IN test2.OBJ
+COMPILER INVOKED BY: D:\keil\C51\BIN\C51.EXE test2.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include<reg52.h>
+   2          #include<intrins.h>  //包含_nop_()函数定义的头文件
+   3          sbit IR=P3^2;           //将IR位定义为P3.2引脚
+   4          unsigned char a[4];    //储存用户码、用户反码与键数据码、键数据反码
+   5          
+   6          sbit led=P2^0;
+   7          sbit beep=P2^1;
+   8          sbit motor=P2^2;
+   9          
+  10          
+  11          
+  12          
+  13          unsigned int LowTime,HighTime; //储存高、低电平的宽度 
+  14          unsigned int code smg[]={0xc0,0xf9,0xa4,0xb0,0x99,0x92,0x82,0xf8,0x80,0x90,0x88,0x83,0xc6,0xa1,0x86,0x8e};
+  15          bit DeCode(void)        
+  16          {
+  17   1          
+  18   1         unsigned char  i,j;
+  19   1              unsigned char temp;    //储存解码出的数据
+  20   1              for(i=0;i<4;i++)      //连续读取4个用户码和键数据码
+  21   1                {
+  22   2                       for(j=0;j<8;j++)  //每个码有8位数字
+  23   2                               {
+  24   3                       temp=temp>>1;  //temp中的各数据位右移一位，因为先读出的是高位数据                                                                      
+  25   3                                 TH0=0;         //定时器清0
+  26   3                                 TL0=0;         //定时器清0
+  27   3                                 TR0=1;         //开启定时器T0
+  28   3                            while(IR==0)   //如果是低电平就等待
+  29   3                             ;              //低电平计时
+  30   3                                 TR0=0;         //关闭定时器T0
+  31   3                                 LowTime=TH0*256+TL0;    //保存低电平宽度
+  32   3                                 TH0=0;         //定时器清0
+  33   3                                 TL0=0;         //定时器清0
+  34   3                                 TR0=1;         //开启定时器T0
+  35   3                                while(IR==1)   //如果是高电平就等待
+  36   3                                     ;                           
+  37   3                                 TR0=0;        //关闭定时器T0
+  38   3                                 HighTime=TH0*256+TL0;   //保存高电平宽度
+  39   3                                 if((LowTime<360)||(LowTime>680))   
+  40   3                                                  return 0;        //如果低电平长度不在合理范围，则认为出错，停止解码                 
+  41   3                                 if((HighTime>400)&&(HighTime<680))   //如果高电平时间在560微秒左右，即计数560／1.085＝516次
+  42   3                                         temp=temp&0x7f;       //(520-100=420, 520+100=620)，则该位是0
+  43   3                                 if((HighTime>1400)&&(HighTime<1850)) //如果高电平时间在1680微秒左右，即计数1680／1.085＝1548次
+  44   3                                         temp=temp|0x80;       //(1550-250=1300,1550+250=1800),则该位是1
+  45   3                           }                                      
+  46   2                 a[i]=temp;   //将解码出的字节值储存在a[i]                                                                                                                                                                     
+  47   2          }                                            
+  48   1        if(a[2]=~a[3])  //验证键数据码和其反码是否相等,一般情况下不必验证用户码
+  49   1               return 1;     //解码正确，返回1
+  50   1      }
+  51          void init(void)
+  52          {
+  53   1      
+  54   1              EA=1;        //开启总中断
+  55   1        
+C51 COMPILER V9.01   TEST2                                                                 12/14/2019 20:53:18 PAGE 2   
+
+  56   1         ET0=1;       //定时器T0中断允许
+  57   1         IT0=1;       //外中断的下降沿触发  
+  58   1          TMOD=0x01;   //使用定时器T0的模式1  
+  59   1              TR0=0;       //定时器T0关闭
+  60   1        EX0=1;       //开外中断0
+  61   1        
+  62   1      }
+  63          
+  64          
+  65          
+  66          
+  67          void function_()
+  68          {
+  69   1              switch(a[2])
+  70   1              {
+  71   2                      case 1:led=0;motor=1;beep=1;break;
+  72   2                      case 2:beep=0;led=1;motor=1;break;
+  73   2                      case 3:led=1;beep=1;motor=0;break;
+  74   2                      default: led=1;motor=1;beep=1;
+  75   2              }       
+  76   1      }
+  77          
+  78          
+  79          void main(void)
+  80          {               
+  81   1          init();
+  82   1              while(1)
+  83   1              { 
+  84   2          }
+  85   1       
+  86   1      }
+  87          
+  88          
+  89          /************************************************************
+  90          函数功能：红外线触发的外中断处理函数
+  91          *************************************************************/
+  92          void Int0(void) interrupt 0
+  93            {      
+  94   1           EX0=0;      //关闭外中断0，不再接收二次红外信号的中断，只解码当前红外信号
+  95   1                TH0=0;      //定时器T0的高8位清0
+  96   1               TL0=0;      //定时器T0的低8位清0
+  97   1                TR0=1;            //开启定时器T0       
+  98   1                while(IR==0);          //如果是低电平就等待，给引导码低电平计时
+  99   1                TR0=0;                //关闭定时器T0     
+ 100   1                LowTime=TH0*256+TL0;  //保存低电平时间
+ 101   1                if(((LowTime>8500)&&(LowTime<9500))!=1) {EX0=1;return;} 
+ 102   1                TH0=0;      //定时器T0的高8位清0
+ 103   1                TL0=0;      //定时器T0的低8位清0
+ 104   1            TR0=1;        //开启定时器T0
+ 105   1       while(IR==1);  //如果是高电平就等待，给引导码高电平计时
+ 106   1                
+ 107   1                
+ 108   1                TR0=0;        //关闭定时器T0
+ 109   1                HighTime=TH0*256+TL0; //保存引导码的高电平长度
+ 110   1        if((HighTime>4000)&&(HighTime<5000))
+ 111   1                      {        
+ 112   2                              DeCode();  
+ 113   2                                              P1=smg[a[2]]; 
+ 114   2                                              function_();
+ 115   2                       
+ 116   2                }
+ 117   1                        
+C51 COMPILER V9.01   TEST2                                                                 12/14/2019 20:53:18 PAGE 3   
+
+ 118   1              EX0=1; 
+ 119   1       
+ 120   1        }
+*** WARNING C291 IN LINE 50 OF TEST2.C: not every exit path returns a value
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    426    ----
+   CONSTANT SIZE    =     32    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      8    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

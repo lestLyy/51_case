@@ -1,0 +1,145 @@
+C51 COMPILER V9.01   SHIYAN3                                                               10/31/2019 14:57:23 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE SHIYAN3
+OBJECT MODULE PLACED IN shiyan3.OBJ
+COMPILER INVOKED BY: D:\keil\C51\BIN\C51.EXE shiyan3.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include"reg51.h"
+   2          #define uint unsigned int
+   3          #define uchar unsigned char
+   4          
+   5          sbit led0=P0^0;
+   6          sbit led1=P0^1;
+   7          sbit led2=P0^2;
+   8          sbit led3=P0^3;
+   9          sbit led4=P0^4;
+  10          sbit led5=P0^5;
+  11          sbit led6=P0^6;
+  12          sbit led7=P0^7;
+  13          
+  14          sbit button=P3^0;
+  15          
+  16          void delay(uint n)
+  17          {
+  18   1              uint i,j;
+  19   1              for(i=0;i<n;i++)
+  20   1                      for(j=0;j<930;j++);
+  21   1      }
+  22          void initTime()
+  23          {
+  24   1              TMOD = 0x02;   //定时器0，工作模式2，8位定时模式
+  25   1              TH0=210;     //写入预置初值（取值1-255，数越大PWM频率越高）
+  26   1              TL0=210;     //写入预置值 （取值1-255，数越大PWM频率越高）
+  27   1              TR0=1;       //启动定时器
+  28   1              ET0=1;       //允许定时器0中断
+  29   1              EA=1;        //允许总中断
+  30   1      }
+  31          void init()
+  32          {
+  33   1              led0=1;
+  34   1              led1=1;
+  35   1              led2=1;
+  36   1              led3=1;
+  37   1              led4=1;
+  38   1              led5=1;
+  39   1              led6=1;
+  40   1              led7=1;
+  41   1      }
+  42          void run1()
+  43          {
+  44   1              led0=0;
+  45   1              led7=0;
+  46   1              delay(150);
+  47   1              init();
+  48   1      
+  49   1              led1=0;
+  50   1              led6=0;
+  51   1              
+  52   1              delay(150);
+  53   1              init();
+  54   1              led2=0;
+  55   1              led5=0;
+C51 COMPILER V9.01   SHIYAN3                                                               10/31/2019 14:57:23 PAGE 2   
+
+  56   1              
+  57   1              delay(150);
+  58   1              init();
+  59   1              led3=0;
+  60   1              led4=0;
+  61   1              delay(150);
+  62   1              init();
+  63   1      }
+  64          
+  65          void run2()
+  66          {
+  67   1              led3=0;
+  68   1              led4=0;
+  69   1              delay(150);
+  70   1              init();
+  71   1      
+  72   1              led2=0;
+  73   1              led5=0;
+  74   1              
+  75   1              delay(150);
+  76   1              init();
+  77   1              led1=0;
+  78   1              led6=0;
+  79   1              
+  80   1              delay(150);
+  81   1              init();
+  82   1              led0=0;
+  83   1              led7=0;
+  84   1              delay(150);
+  85   1              init();
+  86   1      }
+  87          
+  88          
+  89          void main()
+  90          {
+  91   1              initTime();
+  92   1              while(1)
+  93   1              {
+  94   2                      if(button==0)
+  95   2                      {
+  96   3                              delay(5);
+  97   3                              if(button==0)
+  98   3                              {
+  99   4                                      run1(); 
+ 100   4                                      delay(50);
+ 101   4                                      run2();
+ 102   4                              }
+ 103   3              
+ 104   3                      }               
+ 105   2                      else
+ 106   2                      {
+ 107   3                               init();
+ 108   3                      }       
+ 109   2              }
+ 110   1      }
+ 111          
+ 112          init0()interrupt 1
+ 113          {
+ 114   1              TH0=210;     
+ 115   1              TL0=210;
+ 116   1              while(button!=0)
+ 117   1                      init();
+C51 COMPILER V9.01   SHIYAN3                                                               10/31/2019 14:57:23 PAGE 3   
+
+ 118   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    191    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

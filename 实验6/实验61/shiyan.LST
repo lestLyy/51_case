@@ -1,0 +1,102 @@
+C51 COMPILER V9.01   SHIYAN                                                                10/29/2019 16:29:17 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE SHIYAN
+OBJECT MODULE PLACED IN shiyan.OBJ
+COMPILER INVOKED BY: D:\keil\C51\BIN\C51.EXE shiyan.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include"reg51.h"
+   2          #define uint unsigned int 
+   3          #define uchar unsigned char
+   4          
+   5          uint code smg[]={0xc0,0xf9,0xa4,0xb0,0x99,0x92,0x82,0xf8,0x80,0x90,0x88,0x83,0xc6,0xa1,0x86,0x8e};
+   6          
+   7          void delay(uint n)
+   8          {
+   9   1              uint i,j;
+  10   1              for(i=0;i<n;i++)
+  11   1                      for(j=0;j<112;j++);
+  12   1      }
+  13          uint num;
+  14          
+  15          void init()
+  16          {
+  17   1              SCON=0X40;              //串口工作在方式1
+  18   1              TMOD=0X20;         //T1工作在模式2,8位自动装载
+  19   1              PCON=0X00;         //波特率不递增
+  20   1              TH1=0XFD;          //波特率9600
+  21   1              TL1=0XFD;
+  22   1              TI=0;
+  23   1              TR1=1;
+  24   1              IE=0x90;
+  25   1      }
+  26          
+  27          void send2port(uint c)
+  28          {
+  29   1              SBUF=c;
+  30   1              while(TI==0);
+  31   1              TI=0;   
+  32   1      }
+  33          
+  34          void scan()
+  35          {
+  36   1              uchar tmp;
+  37   1              P1=0x0f;
+  38   1              delay(1);
+  39   1              tmp=P1^0x0f;
+  40   1              switch(tmp)
+  41   1              {
+  42   2                      case 1:num=1;break;
+  43   2                      case 2:num=2;break;
+  44   2                      case 4:num=3;break;
+  45   2                      case 8:num=4;break;
+  46   2              }
+  47   1              P1=0xf0;
+  48   1              delay(1);
+  49   1              tmp=P1^0xf0;
+  50   1              switch(tmp)
+  51   1              {
+  52   2                      case 16:num+=0;break;
+  53   2                      case 32:num+=4;break;
+  54   2                      case 64:num+=8;break;
+  55   2                      case 128:num+=12;break;
+C51 COMPILER V9.01   SHIYAN                                                                10/29/2019 16:29:17 PAGE 2   
+
+  56   2              }
+  57   1      }
+  58          
+  59          void main()
+  60          {
+  61   1              uint pre_num;
+  62   1              init();
+  63   1              TR1=1;
+  64   1              while(1)
+  65   1              {
+  66   2                      scan();
+  67   2                      delay(1);
+  68   2                      if(pre_num!=num)
+  69   2                      {
+  70   3                              P0=smg[num-1];
+  71   3                              
+  72   3                              send2port(num-1);
+  73   3                              pre_num=num;    
+  74   3                      }
+  75   2                      delay(10);              
+  76   2              }
+  77   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    243    ----
+   CONSTANT SIZE    =     32    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      2       2
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

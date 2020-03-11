@@ -1,0 +1,68 @@
+A51 MACRO ASSEMBLER  SHIYAN                                                               10/25/2019 22:17:25 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.02
+OBJECT MODULE PLACED IN shiyan.OBJ
+ASSEMBLER INVOKED BY: D:\keil\C51\BIN\A51.EXE shiyan.asm SET(SMALL) DEBUG EP
+
+LOC  OBJ            LINE     SOURCE
+
+0000                   1     org 0000h
+0000 7BF8              2     mov r3,#-8
+0002 7C10              3     mov r4,#16
+0004 7940              4     mov r1,#40h
+0006 7850              5     mov r0,#50h
+0008 756000            6     mov 60H,#0
+000B 756100            7     mov 61H,#0
+000E 756200            8     mov 62H,#0
+                       9     
+0011                  10     loop:
+0011 EB               11              mov a,r3
+0012 20E703           12              jb acc.7,small 
+0015 30E70D           13              jnb acc.7,big
+                      14              
+                      15                      
+                      16     
+0018                  17     small:
+0018 F7               18               mov @r1,a
+0019 04               19               inc a
+001A 09               20               inc r1
+001B 0B               21               inc r3
+001C 1C               22               dec r4
+001D 0561             23               inc 61h
+001F 80F0             24               jmp loop
+                      25     
+0021 0562             26     zero: inc 62h
+0023 8002             27               jmp flag
+0025                  28     big:  
+0025 60FA             29               jz zero
+0027                  30      flag:
+0027 F6               31               mov @r0,a
+0028 04               32               inc a
+0029 08               33               inc r0
+002A 0B               34               inc r3
+002B 0560             35               inc 60h
+002D DCE2             36               djnz r4,loop
+                      37     
+                      38     end
+                              
+A51 MACRO ASSEMBLER  SHIYAN                                                               10/25/2019 22:17:25 PAGE     2
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E             T Y P E  V A L U E   ATTRIBUTES
+
+ACC. . . . . . . .  D ADDR   00E0H   A   
+BIG. . . . . . . .  C ADDR   0025H   A   
+FLAG . . . . . . .  C ADDR   0027H   A   
+LOOP . . . . . . .  C ADDR   0011H   A   
+SMALL. . . . . . .  C ADDR   0018H   A   
+ZERO . . . . . . .  C ADDR   0021H   A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)
