@@ -1,0 +1,316 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        11/06/2019  01:03:29  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+D:\KEIL\C51\BIN\BL51.EXE STARTUP.obj, shiyan5.obj TO shiyan5 RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL WITH FLOATING POINT ARITHMETIC
+
+
+INPUT MODULES INCLUDED:
+  STARTUP.obj (?C_STARTUP)
+  shiyan5.obj (SHIYAN5)
+  D:\KEIL\C51\LIB\C51FPS.LIB (?C?FPMUL)
+  D:\KEIL\C51\LIB\C51FPS.LIB (?C?FCAST)
+  D:\KEIL\C51\LIB\C51FPS.LIB (?C?CASTF)
+  D:\KEIL\C51\LIB\C51FPS.LIB (?C?FPGETOPN)
+  D:\KEIL\C51\LIB\C51S.LIB (?C_INIT)
+  D:\KEIL\C51\LIB\C51S.LIB (?C?ULDIV)
+  D:\KEIL\C51\LIB\C51S.LIB (?C?LNEG)
+  D:\KEIL\C51\LIB\C51S.LIB (?C?ULCMP)
+
+
+LINK MAP OF MODULE:  shiyan5 (?C_STARTUP)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+                    0008H     0018H                  *** GAP ***
+            BIT     0020H.0   0000H.1   UNIT         ?BI?SHIYAN5
+                    0020H.1   0000H.7                *** GAP ***
+            DATA    0021H     001DH     UNIT         ?DT?SHIYAN5
+            IDATA   003EH     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     0003H     UNIT         ?PR?ZD0?SHIYAN5
+                    0006H     0005H                  *** GAP ***
+            CODE    000BH     0003H     ABSOLUTE     
+            CODE    000EH     000DH     UNIT         ?PR?GO?SHIYAN5
+            CODE    001BH     0003H     ABSOLUTE     
+            CODE    001EH     02B2H     UNIT         ?C?LIB_CODE
+            CODE    02D0H     00E8H     UNIT         ?PR?CONUT?SHIYAN5
+            CODE    03B8H     008CH     UNIT         ?C_C51STARTUP
+            CODE    0444H     0049H     UNIT         ?PR?ZD3?SHIYAN5
+            CODE    048DH     002FH     UNIT         ?PR?DISPLAY?SHIYAN5
+            CODE    04BCH     002EH     UNIT         ?C_INITSEG
+            CODE    04EAH     0025H     UNIT         ?PR?MAIN?SHIYAN5
+
+
+
+OVERLAY MAP OF MODULE:   shiyan5 (?C_STARTUP)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/06/2019  01:03:29  PAGE 2
+
+
+  +--> ?PR?MAIN?SHIYAN5
+  +--> ?C_INITSEG
+
+?PR?MAIN?SHIYAN5
+  +--> ?PR?CONUT?SHIYAN5
+
+?PR?CONUT?SHIYAN5
+  +--> ?PR?GO?SHIYAN5
+
+*** NEW ROOT ***************************************************
+
+?PR?ZD3?SHIYAN5
+  +--> ?PR?DISPLAY?SHIYAN5
+
+
+
+SYMBOL TABLE OF MODULE:  shiyan5 (?C_STARTUP)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        ?C_STARTUP
+  C:03B8H         SEGMENT       ?C_C51STARTUP
+  I:003EH         SEGMENT       ?STACK
+  C:0000H         PUBLIC        ?C_STARTUP
+  D:00E0H         SYMBOL        ACC
+  D:00F0H         SYMBOL        B
+  D:0083H         SYMBOL        DPH
+  D:0082H         SYMBOL        DPL
+  N:0000H         SYMBOL        IBPSTACK
+  N:0100H         SYMBOL        IBPSTACKTOP
+  N:0080H         SYMBOL        IDATALEN
+  C:03BBH         SYMBOL        IDATALOOP
+  N:0000H         SYMBOL        PBPSTACK
+  N:0100H         SYMBOL        PBPSTACKTOP
+  N:0000H         SYMBOL        PDATALEN
+  N:0000H         SYMBOL        PDATASTART
+  N:0000H         SYMBOL        PPAGE
+  N:0000H         SYMBOL        PPAGEENABLE
+  D:00A0H         SYMBOL        PPAGE_SFR
+  D:0081H         SYMBOL        SP
+  C:03B8H         SYMBOL        STARTUP1
+  N:0000H         SYMBOL        XBPSTACK
+  N:0000H         SYMBOL        XBPSTACKTOP
+  N:0000H         SYMBOL        XDATALEN
+  N:0000H         SYMBOL        XDATASTART
+  C:0000H         LINE#         126
+  C:03B8H         LINE#         133
+  C:03BAH         LINE#         134
+  C:03BBH         LINE#         135
+  C:03BCH         LINE#         136
+  C:03BEH         LINE#         185
+  C:03C1H         LINE#         196
+  -------         ENDMOD        ?C_STARTUP
+
+  -------         MODULE        SHIYAN5
+  C:0000H         SYMBOL        _ICE_DUMMY_
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/06/2019  01:03:29  PAGE 3
+
+
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  B:00A8H.7       PUBLIC        EA
+  C:02D0H         PUBLIC        Conut
+  C:0003H         PUBLIC        zd0
+  D:0021H         PUBLIC        positon
+  C:0444H         PUBLIC        zd3
+  B:00A0H.0       PUBLIC        P2_0
+  B:00A0H.1       PUBLIC        P2_1
+  B:0090H.7       PUBLIC        rightBack
+  B:00A0H.6       PUBLIC        DU
+  B:0020H.0       PUBLIC        flag
+  B:00A0H.7       PUBLIC        WE
+  B:0090H.4       PUBLIC        enL
+  B:0090H.2       PUBLIC        leftBack
+  D:0025H         PUBLIC        timer
+  B:0090H.5       PUBLIC        enR
+  C:04EAH         PUBLIC        main
+  D:0027H         PUBLIC        time
+  D:0029H         PUBLIC        posit
+  D:0089H         PUBLIC        TMOD
+  B:00A8H.1       PUBLIC        ET0
+  B:0090H.6       PUBLIC        rightFor
+  B:00A8H.3       PUBLIC        ET1
+  D:008CH         PUBLIC        TH0
+  D:008DH         PUBLIC        TH1
+  D:008AH         PUBLIC        TL0
+  D:008BH         PUBLIC        TL1
+  D:002AH         PUBLIC        S
+  C:000EH         PUBLIC        go
+  B:0090H.3       PUBLIC        leftFor
+  B:0088H.4       PUBLIC        TR0
+  B:0088H.6       PUBLIC        TR1
+  C:048DH         PUBLIC        Display
+  D:002EH         PUBLIC        discode
+  D:003AH         PUBLIC        disbuff
+  -------         PROC          GO
+  C:000EH         LINE#         24
+  C:000EH         LINE#         25
+  C:000EH         LINE#         26
+  C:0010H         LINE#         27
+  C:0012H         LINE#         28
+  C:0014H         LINE#         29
+  C:0016H         LINE#         30
+  C:0018H         LINE#         31
+  C:001AH         LINE#         32
+  -------         ENDPROC       GO
+  -------         PROC          DISPLAY
+  C:048DH         LINE#         34
+  C:048DH         LINE#         35
+  C:048DH         LINE#         36
+  C:048FH         LINE#         37
+  C:0491H         LINE#         38
+  C:0491H         LINE#         40
+  C:049DH         LINE#         41
+  C:049FH         LINE#         42
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/06/2019  01:03:29  PAGE 4
+
+
+  C:04A1H         LINE#         44
+  C:04A3H         LINE#         45
+  C:04ABH         LINE#         46
+  C:04ADH         LINE#         47
+  C:04AFH         LINE#         48
+  C:04B8H         LINE#         49
+  C:04BBH         LINE#         50
+  -------         ENDPROC       DISPLAY
+  -------         PROC          CONUT
+  C:02D0H         LINE#         52
+  C:02D0H         LINE#         53
+  C:02D0H         LINE#         54
+  C:02E0H         LINE#         55
+  C:02E3H         LINE#         56
+  C:02E5H         LINE#         58
+  C:0302H         LINE#         60
+  C:031AH         LINE#         61
+  C:031AH         LINE#         62
+  C:031CH         LINE#         63
+  C:031FH         LINE#         64
+  C:0322H         LINE#         65
+  C:0325H         LINE#         66
+  C:0328H         LINE#         67
+  C:0328H         LINE#         68
+  C:033DH         LINE#         69
+  C:033DH         LINE#         70
+  C:033FH         LINE#         71
+  C:0341H         LINE#         72
+  C:0355H         LINE#         73
+  C:037AH         LINE#         74
+  C:039EH         LINE#         75
+  C:03B3H         LINE#         76
+  C:03B4H         LINE#         78
+  C:03B7H         LINE#         79
+  -------         ENDPROC       CONUT
+  -------         PROC          ZD0
+  C:0003H         LINE#         81
+  C:0003H         LINE#         83
+  C:0005H         LINE#         84
+  -------         ENDPROC       ZD0
+  -------         PROC          ZD3
+  C:0444H         LINE#         86
+  C:044DH         LINE#         88
+  C:0450H         LINE#         89
+  C:0453H         LINE#         90
+  C:0456H         LINE#         91
+  C:045EH         LINE#         92
+  C:0467H         LINE#         93
+  C:0467H         LINE#         94
+  C:046DH         LINE#         95
+  C:046FH         LINE#         96
+  C:0470H         LINE#         97
+  C:0471H         LINE#         98
+  C:0472H         LINE#         99
+  C:0473H         LINE#         100
+  C:0474H         LINE#         101
+  C:0475H         LINE#         102
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/06/2019  01:03:29  PAGE 5
+
+
+  C:0476H         LINE#         103
+  C:0477H         LINE#         104
+  C:0478H         LINE#         105
+  C:0479H         LINE#         106
+  C:047AH         LINE#         107
+  C:047BH         LINE#         108
+  C:047CH         LINE#         109
+  C:047DH         LINE#         110
+  C:047EH         LINE#         111
+  C:047FH         LINE#         112
+  C:0480H         LINE#         113
+  C:0481H         LINE#         114
+  C:0482H         LINE#         115
+  C:0483H         LINE#         116
+  C:0484H         LINE#         117
+  C:0486H         LINE#         118
+  C:0486H         LINE#         119
+  -------         ENDPROC       ZD3
+  -------         PROC          MAIN
+  C:04EAH         LINE#         122
+  C:04EAH         LINE#         124
+  C:04EAH         LINE#         125
+  C:04EDH         LINE#         126
+  C:04F0H         LINE#         127
+  C:04F2H         LINE#         128
+  C:04F5H         LINE#         129
+  C:04F8H         LINE#         130
+  C:04FAH         LINE#         131
+  C:04FCH         LINE#         132
+  C:04FEH         LINE#         133
+  C:0500H         LINE#         135
+  C:0500H         LINE#         136
+  C:0500H         LINE#         137
+  C:0503H         LINE#         138
+  C:0505H         LINE#         139
+  C:0508H         LINE#         140
+  C:050AH         LINE#         141
+  C:050DH         LINE#         142
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        SHIYAN5
+
+  -------         MODULE        ?C?FPMUL
+  C:001EH         PUBLIC        ?C?FPMUL
+  -------         ENDMOD        ?C?FPMUL
+
+  -------         MODULE        ?C?FCAST
+  C:012EH         PUBLIC        ?C?FCASTC
+  C:0129H         PUBLIC        ?C?FCASTI
+  C:0124H         PUBLIC        ?C?FCASTL
+  -------         ENDMOD        ?C?FCAST
+
+  -------         MODULE        ?C?CASTF
+  C:0162H         PUBLIC        ?C?CASTF
+  -------         ENDMOD        ?C?CASTF
+
+  -------         MODULE        ?C?ULDIV
+  C:021FH         PUBLIC        ?C?ULDIV
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/06/2019  01:03:29  PAGE 6
+
+
+  -------         ENDMOD        ?C?ULDIV
+
+  -------         MODULE        ?C?LNEG
+  C:02B1H         PUBLIC        ?C?LNEG
+  -------         ENDMOD        ?C?LNEG
+
+  -------         MODULE        ?C?ULCMP
+  C:02BFH         PUBLIC        ?C?ULCMP
+  -------         ENDMOD        ?C?ULCMP
+
+Program Size: data=38.1 xdata=0 code=1290
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

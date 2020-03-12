@@ -1,0 +1,4 @@
+"STARTUP.obj",
+"square.obj" 
+TO "square" 
+RAMSIZE(256) 

@@ -1,0 +1,350 @@
+C51 COMPILER V9.01   MAIN                                                                  12/09/2019 19:36:36 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: D:\keil\C51\BIN\C51.EXE main.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include "reg51.h"
+   2          #include <intrins.h>   //包含nop等系统函数
+   3          typedef  unsigned int uint;
+   4          typedef  unsigned char uchar;
+   5          
+   6          sbit leftBack=P1^2;
+   7          sbit leftFor=P1^3;
+   8          sbit enL=P1^4;
+   9          sbit enR=P1^5;
+  10          sbit rightFor=P1^6;
+  11          sbit rightBack=P1^7;
+  12          sbit Servo = P2^7;//舵机接口
+  13          sbit echo=P2^0;           //超声波
+  14          sbit trig=P2^1;
+  15          sbit led_left=P3^2;        //左前红外线
+  16          sbit led_right=P3^3;   //右前红外线
+  17          
+  18          uchar left_pwm,right_pwm,pwm_t;
+  19          bit flag; uint S;
+  20          void delay(unsigned int z)//毫秒级延时
+  21          {
+  22   1              unsigned int x,y;
+  23   1              for(x = z; x > 0; x--)
+  24   1                      for(y = 114; y > 0 ; y--);
+  25   1      }
+  26          
+  27          void delay10us(unsigned char i)         //10us延时函数 启动超声波模块时使用
+  28          { 
+  29   1         unsigned char j; 
+  30   1              do{ 
+  31   2                      j = 10; 
+  32   2                      do{ 
+  33   3                              _nop_(); 
+  34   3                      }while(--j); 
+  35   2              }while(--i); 
+  36   1      }
+  37          
+  38          void motor_init()
+  39          {
+  40   1              leftBack=0;
+  41   1              rightBack=0;
+  42   1              leftFor=0;
+  43   1              rightFor=0;
+  44   1              
+  45   1      }
+  46          
+  47          void go()
+  48          {
+  49   1      //       left_pwm=100;
+  50   1      //       right_pwm=100;
+  51   1               enL=1;
+  52   1               enR=1;
+  53   1               motor_init();
+  54   1               leftFor=1;
+  55   1               rightFor=1;
+C51 COMPILER V9.01   MAIN                                                                  12/09/2019 19:36:36 PAGE 2   
+
+  56   1      }
+  57          void back(uint ms)                                                                                       
+  58          {
+  59   1      //       left_pwm=100;
+  60   1      //       right_pwm=100;
+  61   1               enL=1;
+  62   1               enR=1;
+  63   1               motor_init();
+  64   1               leftBack=1;
+  65   1               rightBack=1;
+  66   1               delay(ms);
+  67   1      }
+  68          
+  69          void left_turn(uint ms)
+  70          {
+  71   1      //      left_pwm=190;
+  72   1      //      right_pwm=60;
+  73   1              enL=1;
+  74   1              enR=1;
+  75   1              motor_init();
+  76   1              rightFor=1;
+  77   1              leftBack=1;
+  78   1              delay(ms);
+  79   1      }
+  80          
+  81          void right_turn(uint ms)
+  82          {
+  83   1      //      left_pwm=60;
+  84   1      //      right_pwm=200;
+  85   1              enL=1;
+  86   1              enR=1;
+  87   1              motor_init();
+  88   1              leftFor=1;
+  89   1              rightBack=1;
+  90   1              delay(ms);
+  91   1      }
+  92          
+  93          void stop()
+  94          {
+  95   1              left_pwm=251;
+  96   1              right_pwm=251;
+  97   1              enL=0;
+  98   1              enR=0;
+  99   1      }
+ 100          void Delay1550us()              //@11.0592MHz
+ 101          {
+ 102   1              unsigned char i, j;
+ 103   1      
+ 104   1              i = 3;
+ 105   1              j = 196;
+ 106   1              do
+ 107   1              {
+ 108   2                      while (--j);
+ 109   2              } while (--i);
+ 110   1      }
+ 111          
+ 112          void Delay18450us()             //@11.0592MHz
+ 113          {
+ 114   1              unsigned char i, j;
+ 115   1      
+ 116   1              _nop_();
+ 117   1              i = 34;
+C51 COMPILER V9.01   MAIN                                                                  12/09/2019 19:36:36 PAGE 3   
+
+ 118   1              j = 16;
+ 119   1              do
+ 120   1              {
+ 121   2                      while (--j);
+ 122   2              } while (--i);
+ 123   1      }
+ 124          /*舵机方波延时向小车右方*/
+ 125          void Delay600us()               //@11.0592MHz
+ 126          {
+ 127   1              unsigned char i, j;
+ 128   1      
+ 129   1              _nop_();
+ 130   1              i = 2;
+ 131   1              j = 15;
+ 132   1              do
+ 133   1              {
+ 134   2                      while (--j);
+ 135   2              } while (--i);
+ 136   1      }
+ 137          void Delay19400us()             //@11.0592MHz
+ 138          {
+ 139   1              unsigned char i, j;
+ 140   1      
+ 141   1              _nop_();
+ 142   1              i = 35;
+ 143   1              j = 197;
+ 144   1              do
+ 145   1              {
+ 146   2                      while (--j);
+ 147   2              } while (--i);
+ 148   1      }
+ 149          /*舵机方波延时朝向小车左方*/
+ 150          void Delay17500us()             //@11.0592MHz
+ 151          {
+ 152   1              unsigned char i, j;
+ 153   1      
+ 154   1              i = 32;
+ 155   1              j = 93;
+ 156   1              do
+ 157   1              {
+ 158   2                      while (--j);
+ 159   2              } while (--i);
+ 160   1      }
+ 161          void Delay2500us()              //@11.0592MHz
+ 162          {
+ 163   1              unsigned char i, j;
+ 164   1      
+ 165   1              i = 5;
+ 166   1              j = 120;
+ 167   1              do
+ 168   1              {
+ 169   2                      while (--j);
+ 170   2              } while (--i);
+ 171   1      }
+ 172          
+ 173          uint Count_s()
+ 174          {
+ 175   1              uint time;
+ 176   1              time=TH0*256+TL0;
+ 177   1              TH0=0;
+ 178   1              TL0=0;
+ 179   1              
+C51 COMPILER V9.01   MAIN                                                                  12/09/2019 19:36:36 PAGE 4   
+
+ 180   1              S=(float)(time*1.085)*0.17;     //算出来是MM
+ 181   1              if((S>=7000)||flag==1) //超出测量范围
+ 182   1              {        
+ 183   2                      flag=0;
+ 184   2              }
+ 185   1              return S;
+ 186   1      }
+ 187          
+ 188          void StartModule()                       //启动超声波模块
+ 189          {
+ 190   1                trig=1;                                            //启动一次模块
+ 191   1            delay10us(2);
+ 192   1                trig=0;
+ 193   1      }
+ 194          
+ 195          uint servo_left()        //舵机0°
+ 196          {
+ 197   1              uchar i,s;
+ 198   1              for(i=0;i<10;i++)
+ 199   1              {       
+ 200   2                      Servo = 1;
+ 201   2                      Delay1550us();
+ 202   2                      Servo = 0;
+ 203   2                      Delay18450us();
+ 204   2              }
+ 205   1      
+ 206   1              delay(2000);
+ 207   1              StartModule();
+ 208   1              while(!echo);
+ 209   1              TR0=1;
+ 210   1              while(echo);
+ 211   1              TR0=0;
+ 212   1              s=Count_s();
+ 213   1              return s;
+ 214   1      }
+ 215          
+ 216          uint servo_right()     //  舵机90°
+ 217          {
+ 218   1              uchar i,s;
+ 219   1               for(i=0;i<10;i++)                //90°
+ 220   1              {       
+ 221   2                      Servo = 1;
+ 222   2                      Delay600us();
+ 223   2                      Servo = 0;
+ 224   2                      Delay19400us();
+ 225   2              }
+ 226   1      
+ 227   1              delay(2000);
+ 228   1              StartModule();
+ 229   1              while(!echo);
+ 230   1              TR0=1;
+ 231   1              while(echo);
+ 232   1              TR0=0;
+ 233   1              s=Count_s();    
+ 234   1              return s;
+ 235   1      }
+ 236          
+ 237          
+ 238          void avoid()
+ 239          {
+ 240   1              uint s1,s2;
+ 241   1              //为0 识别障碍物 为1没有识别到障碍物
+C51 COMPILER V9.01   MAIN                                                                  12/09/2019 19:36:36 PAGE 5   
+
+ 242   1              if(led_left==0 || led_right==0)
+ 243   1              {
+ 244   2                      stop();
+ 245   2                      delay(100);
+ 246   2                      s2=servo_right();
+ 247   2                      delay(1000);
+ 248   2                      s1=servo_left();
+ 249   2                      delay(1000);
+ 250   2                      back(80);
+ 251   2                      if(s1>s2)
+ 252   2                      {                       
+ 253   3                              right_turn(150);
+ 254   3                              
+ 255   3                      }
+ 256   2                      else
+ 257   2                      {
+ 258   3                              left_turn(150);
+ 259   3                      }
+ 260   2              }
+ 261   1              else
+ 262   1              {
+ 263   2                      go();
+ 264   2              }
+ 265   1      }
+ 266          
+ 267          void init(void)
+ 268          {
+ 269   1              EA = 1;     //开总中断
+ 270   1              TMOD |= 0x01;//定时器0工作模块1,16位定时模式。T0用测ECH0脉冲长度
+ 271   1              TH0 = 0;
+ 272   1              TL0 = 0;//T0,16位定时计数用于记录ECHO高电平时间
+ 273   1              ET0 = 1;//允许定时器0中断
+ 274   1      
+ 275   1              TMOD |= 0x20;   //定时器1，8位自动重装模块
+ 276   1              TH1 = 220;     
+ 277   1          TL1 = 220;     //11.0592M晶振下占空比最大比值是256,输出100HZ
+ 278   1              TR1 = 1;//启动定时器1
+ 279   1      //      ET1 = 1;//允许定时器1中断
+ 280   1      }
+ 281          
+ 282          void servo_init()
+ 283          {
+ 284   1              Servo = 0;
+ 285   1              Servo = 1;
+ 286   1              Delay1550us();
+ 287   1              Servo = 0;
+ 288   1              Delay18450us();
+ 289   1              Servo = 1;
+ 290   1              delay(1000);
+ 291   1      }
+ 292          void time_0() interrupt 1
+ 293          {
+ 294   1              flag=1;
+ 295   1      }
+ 296          //void time_pwm() interrupt 3
+ 297          //{
+ 298          //      pwm_t++;
+ 299          //      if(pwm_t==250)
+ 300          //              pwm_t=enL=enR=0;
+ 301          //      if(left_pwm== pwm_t)
+ 302          //              enL=1;
+ 303          //      if(right_pwm==pwm_t)
+C51 COMPILER V9.01   MAIN                                                                  12/09/2019 19:36:36 PAGE 6   
+
+ 304          //              enR=1;
+ 305          //}
+ 306          
+ 307          void main()
+ 308          {
+ 309   1              servo_init();
+ 310   1              init();
+ 311   1              
+ 312   1              while(1)
+ 313   1              {               
+ 314   2                      avoid();
+ 315   2              
+ 316   2              }
+ 317   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    435    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      5       2
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

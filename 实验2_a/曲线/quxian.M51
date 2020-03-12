@@ -1,0 +1,352 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        11/01/2019  18:04:28  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+D:\KEIL\C51\BIN\BL51.EXE STARTUP.obj, quxian.obj TO quxian RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  STARTUP.obj (?C_STARTUP)
+  quxian.obj (QUXIAN)
+  D:\KEIL\C51\LIB\C51S.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  quxian (?C_STARTUP)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0008H     UNIT         ?DT?QUXIAN
+            IDATA   0010H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     0008H     UNIT         ?PR?MAIN?QUXIAN
+            CODE    000BH     0003H     ABSOLUTE     
+            CODE    000EH     008CH     UNIT         ?C_C51STARTUP
+            CODE    009AH     0066H     UNIT         ?PR?RUN?QUXIAN
+            CODE    0100H     0053H     UNIT         ?PR?INIT0?QUXIAN
+            CODE    0153H     0028H     UNIT         ?PR?_DELAY?QUXIAN
+            CODE    017BH     0026H     UNIT         ?PR?INIT?QUXIAN
+            CODE    01A1H     0016H     UNIT         ?PR?_YUAN1?QUXIAN
+            CODE    01B7H     0016H     UNIT         ?PR?_YUAN2?QUXIAN
+            CODE    01CDH     0016H     UNIT         ?PR?_GO?QUXIAN
+            CODE    01E3H     0016H     UNIT         ?PR?_LEFT?QUXIAN
+            CODE    01F9H     0016H     UNIT         ?PR?_RIGHT?QUXIAN
+            CODE    020FH     0010H     UNIT         ?PR?INITTIME?QUXIAN
+            CODE    021FH     0009H     UNIT         ?C_INITSEG
+
+
+
+OVERLAY MAP OF MODULE:   quxian (?C_STARTUP)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?QUXIAN
+  +--> ?C_INITSEG
+
+?PR?MAIN?QUXIAN
+  +--> ?PR?INITTIME?QUXIAN
+  +--> ?PR?RUN?QUXIAN
+
+?PR?RUN?QUXIAN
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/01/2019  18:04:28  PAGE 2
+
+
+  +--> ?PR?_YUAN1?QUXIAN
+  +--> ?PR?_DELAY?QUXIAN
+  +--> ?PR?INIT?QUXIAN
+  +--> ?PR?_LEFT?QUXIAN
+  +--> ?PR?_GO?QUXIAN
+  +--> ?PR?_YUAN2?QUXIAN
+
+?PR?_YUAN1?QUXIAN
+  +--> ?PR?INIT?QUXIAN
+  +--> ?PR?_DELAY?QUXIAN
+
+?PR?INIT?QUXIAN
+  +--> ?PR?_GO?QUXIAN
+  +--> ?PR?_DELAY?QUXIAN
+  +--> ?PR?_RIGHT?QUXIAN
+
+?PR?_GO?QUXIAN
+  +--> ?PR?_DELAY?QUXIAN
+
+?PR?_RIGHT?QUXIAN
+  +--> ?PR?_DELAY?QUXIAN
+
+?PR?_LEFT?QUXIAN
+  +--> ?PR?INIT?QUXIAN
+  +--> ?PR?_DELAY?QUXIAN
+
+?PR?_YUAN2?QUXIAN
+  +--> ?PR?INIT?QUXIAN
+  +--> ?PR?_DELAY?QUXIAN
+
+
+
+SYMBOL TABLE OF MODULE:  quxian (?C_STARTUP)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        ?C_STARTUP
+  C:000EH         SEGMENT       ?C_C51STARTUP
+  I:0010H         SEGMENT       ?STACK
+  C:0000H         PUBLIC        ?C_STARTUP
+  D:00E0H         SYMBOL        ACC
+  D:00F0H         SYMBOL        B
+  D:0083H         SYMBOL        DPH
+  D:0082H         SYMBOL        DPL
+  N:0000H         SYMBOL        IBPSTACK
+  N:0100H         SYMBOL        IBPSTACKTOP
+  N:0080H         SYMBOL        IDATALEN
+  C:0011H         SYMBOL        IDATALOOP
+  N:0000H         SYMBOL        PBPSTACK
+  N:0100H         SYMBOL        PBPSTACKTOP
+  N:0000H         SYMBOL        PDATALEN
+  N:0000H         SYMBOL        PDATASTART
+  N:0000H         SYMBOL        PPAGE
+  N:0000H         SYMBOL        PPAGEENABLE
+  D:00A0H         SYMBOL        PPAGE_SFR
+  D:0081H         SYMBOL        SP
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/01/2019  18:04:28  PAGE 3
+
+
+  C:000EH         SYMBOL        STARTUP1
+  N:0000H         SYMBOL        XBPSTACK
+  N:0000H         SYMBOL        XBPSTACKTOP
+  N:0000H         SYMBOL        XDATALEN
+  N:0000H         SYMBOL        XDATASTART
+  C:0000H         LINE#         126
+  C:000EH         LINE#         133
+  C:0010H         LINE#         134
+  C:0011H         LINE#         135
+  C:0012H         LINE#         136
+  C:0014H         LINE#         185
+  C:0017H         LINE#         196
+  -------         ENDMOD        ?C_STARTUP
+
+  -------         MODULE        QUXIAN
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0090H         PUBLIC        P1
+  B:00A8H.7       PUBLIC        EA
+  C:015BH         PUBLIC        _delay
+  B:0090H.7       PUBLIC        rightBack
+  B:0090H.4       PUBLIC        enL
+  C:01F9H         PUBLIC        _right
+  B:0090H.2       PUBLIC        leftBack
+  B:0090H.5       PUBLIC        enR
+  C:0003H         PUBLIC        main
+  C:01E3H         PUBLIC        _left
+  D:0089H         PUBLIC        TMOD
+  C:0198H         PUBLIC        init
+  C:020FH         PUBLIC        initTime
+  B:00A8H.1       PUBLIC        ET0
+  D:0008H         PUBLIC        right_zkb
+  B:0090H.6       PUBLIC        rightFor
+  D:008CH         PUBLIC        TH0
+  D:008AH         PUBLIC        TL0
+  C:009AH         PUBLIC        run
+  C:01CDH         PUBLIC        _go
+  D:000AH         PUBLIC        left_zkb
+  B:0090H.3       PUBLIC        leftFor
+  B:0088H.4       PUBLIC        TR0
+  C:0100H         PUBLIC        init0
+  D:000CH         PUBLIC        l
+  C:01A1H         PUBLIC        _yuan1
+  C:01B7H         PUBLIC        _yuan2
+  D:000EH         PUBLIC        r
+  C:0156H         SYMBOL        L?0033
+  -------         PROC          L?0032
+  -------         ENDPROC       L?0032
+  C:0156H         SYMBOL        L?0033
+  -------         PROC          _DELAY
+  D:0006H         SYMBOL        n
+  -------         DO            
+  D:0004H         SYMBOL        i
+  D:0002H         SYMBOL        j
+  -------         ENDDO         
+  C:015BH         LINE#         15
+  C:015BH         LINE#         16
+  C:015BH         LINE#         18
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/01/2019  18:04:28  PAGE 4
+
+
+  C:0165H         LINE#         19
+  C:017AH         LINE#         20
+  -------         ENDPROC       _DELAY
+  -------         PROC          INITTIME
+  C:020FH         LINE#         22
+  C:020FH         LINE#         23
+  C:020FH         LINE#         25
+  C:0212H         LINE#         26
+  C:0215H         LINE#         27
+  C:0218H         LINE#         28
+  C:021AH         LINE#         29
+  C:021CH         LINE#         30
+  C:021EH         LINE#         32
+  -------         ENDPROC       INITTIME
+  C:0181H         SYMBOL        L?0031
+  -------         PROC          L?0030
+  -------         ENDPROC       L?0030
+  C:0181H         SYMBOL        L?0031
+  -------         PROC          INIT
+  C:0198H         LINE#         34
+  C:0198H         LINE#         35
+  C:0198H         LINE#         36
+  C:019AH         LINE#         37
+  C:019CH         LINE#         38
+  C:019EH         LINE#         39
+  C:01A0H         LINE#         40
+  -------         ENDPROC       INIT
+  -------         PROC          _YUAN1
+  D:0006H         SYMBOL        n
+  C:01A1H         LINE#         42
+  C:01A1H         LINE#         43
+  C:01A1H         LINE#         44
+  C:01A4H         LINE#         45
+  C:01AAH         LINE#         46
+  C:01B0H         LINE#         47
+  C:01B2H         LINE#         48
+  C:01B4H         LINE#         49
+  -------         ENDPROC       _YUAN1
+  -------         PROC          _YUAN2
+  D:0006H         SYMBOL        n
+  C:01B7H         LINE#         52
+  C:01B7H         LINE#         53
+  C:01B7H         LINE#         54
+  C:01BAH         LINE#         55
+  C:01C0H         LINE#         56
+  C:01C6H         LINE#         57
+  C:01C8H         LINE#         58
+  C:01CAH         LINE#         59
+  -------         ENDPROC       _YUAN2
+  -------         PROC          _GO
+  D:0006H         SYMBOL        n
+  C:01CDH         LINE#         62
+  C:01CDH         LINE#         63
+  C:01CDH         LINE#         64
+  C:01D0H         LINE#         65
+  C:01D6H         LINE#         66
+  C:01DCH         LINE#         67
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/01/2019  18:04:28  PAGE 5
+
+
+  C:01DEH         LINE#         68
+  C:01E0H         LINE#         69
+  -------         ENDPROC       _GO
+  -------         PROC          _LEFT
+  D:0006H         SYMBOL        n
+  C:01E3H         LINE#         72
+  C:01E3H         LINE#         73
+  C:01E3H         LINE#         74
+  C:01E6H         LINE#         75
+  C:01ECH         LINE#         76
+  C:01F2H         LINE#         77
+  C:01F4H         LINE#         78
+  C:01F6H         LINE#         79
+  -------         ENDPROC       _LEFT
+  -------         PROC          _RIGHT
+  D:0006H         SYMBOL        n
+  C:01F9H         LINE#         82
+  C:01F9H         LINE#         83
+  C:01F9H         LINE#         84
+  C:01FCH         LINE#         85
+  C:0202H         LINE#         86
+  C:0208H         LINE#         87
+  C:020AH         LINE#         88
+  C:020CH         LINE#         89
+  -------         ENDPROC       _RIGHT
+  -------         PROC          RUN
+  C:009AH         LINE#         92
+  C:009AH         LINE#         93
+  C:009AH         LINE#         95
+  C:00A1H         LINE#         96
+  C:00A1H         LINE#         97
+  C:00A4H         LINE#         98
+  C:00A6H         LINE#         99
+  C:00A6H         LINE#         100
+  C:00A6H         LINE#         101
+  C:00A6H         LINE#         102
+  C:00A6H         LINE#         103
+  C:00A6H         LINE#         104
+  C:00A6H         LINE#         105
+  C:00A9H         LINE#         106
+  C:00A9H         LINE#         107
+  C:00A9H         LINE#         108
+  C:00A9H         LINE#         109
+  C:00A9H         LINE#         110
+  C:00A9H         LINE#         111
+  C:00ACH         LINE#         112
+  C:00AFH         LINE#         113
+  C:00B4H         LINE#         114
+  C:00B9H         LINE#         115
+  C:00BCH         LINE#         116
+  C:00C1H         LINE#         118
+  C:00C6H         LINE#         119
+  C:00C9H         LINE#         120
+  C:00CEH         LINE#         121
+  C:00CEH         LINE#         122
+  C:00CEH         LINE#         123
+  C:00CEH         LINE#         124
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/01/2019  18:04:28  PAGE 6
+
+
+  C:00CEH         LINE#         125
+  C:00CEH         LINE#         126
+  C:00CEH         LINE#         127
+  C:00CEH         LINE#         128
+  C:00D1H         LINE#         129
+  C:00D6H         LINE#         130
+  C:00DBH         LINE#         131
+  C:00DBH         LINE#         132
+  C:00DEH         LINE#         133
+  C:00E0H         LINE#         134
+  C:00E0H         LINE#         135
+  C:00E3H         LINE#         136
+  C:00E8H         LINE#         137
+  C:00EBH         LINE#         138
+  C:00F0H         LINE#         139
+  C:00F0H         LINE#         140
+  C:00F0H         LINE#         141
+  C:00F3H         LINE#         142
+  C:00F8H         LINE#         143
+  C:00FBH         LINE#         144
+  -------         ENDPROC       RUN
+  -------         PROC          MAIN
+  C:0003H         LINE#         151
+  C:0003H         LINE#         152
+  C:0003H         LINE#         153
+  C:0006H         LINE#         154
+  C:0009H         LINE#         155
+  -------         ENDPROC       MAIN
+  -------         PROC          INIT0
+  C:0100H         LINE#         158
+  C:0104H         LINE#         160
+  C:010CH         LINE#         161
+  C:0114H         LINE#         162
+  C:011FH         LINE#         163
+  C:0123H         LINE#         165
+  C:0125H         LINE#         166
+  C:012DH         LINE#         167
+  C:0131H         LINE#         169
+  C:013CH         LINE#         170
+  C:0140H         LINE#         172
+  C:0142H         LINE#         173
+  C:014AH         LINE#         174
+  C:014EH         LINE#         175
+  -------         ENDPROC       INIT0
+  -------         ENDMOD        QUXIAN
+
+Program Size: data=17.0 xdata=0 code=552
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

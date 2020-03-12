@@ -1,0 +1,4 @@
+"STARTUP.obj",
+"s_run.obj" 
+TO "s_run" 
+RAMSIZE(256) 

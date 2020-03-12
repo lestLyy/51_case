@@ -1,0 +1,161 @@
+C51 COMPILER V9.01   RED_LIGHT                                                             11/02/2019 10:45:47 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE RED_LIGHT
+OBJECT MODULE PLACED IN red_light.OBJ
+COMPILER INVOKED BY: D:\keil\C51\BIN\C51.EXE red_light.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include "reg51.h"
+   2          #define uint unsigned int
+   3          #define uchar unsigned char
+   4          
+   5          sbit leftBack=P1^2;
+   6          sbit leftFor=P1^3;
+   7          sbit rightFor=P1^6;
+   8          sbit rightBack=P1^7;
+   9          sbit enL=P1^4;
+  10          sbit enR=P1^5;
+  11          
+  12          sbit led=P0^0;
+  13          
+  14          sbit left_red=P3^3;
+  15          sbit right_red=P3^2;
+  16          
+  17          uint left_zkb,i=0;
+  18          uint right_zkb,j=0;
+  19          
+  20          void delay(uint n)
+  21          {
+  22   1              uint i,j;
+  23   1              for(i=0;i<n;i++)
+  24   1                      for(j=0;j<930;j++);
+  25   1      }
+  26          
+  27          void initTime()
+  28          {
+  29   1              left_red=0;
+  30   1              right_red=0;
+  31   1              TMOD = 0x02;   //定时器0，工作模式2，8位定时模式
+  32   1              TH0=210;     //写入预置初值（取值1-255，数越大PWM频率越高）
+  33   1              TL0=210;     //写入预置值 （取值1-255，数越大PWM频率越高）
+  34   1              TR0=1;       //启动定时器
+  35   1              ET0=1;       //允许定时器0中断
+  36   1              EA=1;        //允许总中断
+  37   1              //P1=0xff;       //初始化P1，输出端口
+  38   1      
+  39   1      }
+  40          
+  41          void init()
+  42          {
+  43   1              enR=0;
+  44   1              enL=0;
+  45   1              leftBack=0;
+  46   1              leftFor=0;
+  47   1              rightBack=0;
+  48   1              rightFor=0;
+  49   1      }
+  50          
+  51          void go()
+  52          {
+  53   1              leftFor = 1     ;
+  54   1              rightFor = 1; 
+  55   1              left_zkb=10;
+C51 COMPILER V9.01   RED_LIGHT                                                             11/02/2019 10:45:47 PAGE 2   
+
+  56   1              right_zkb=10;
+  57   1              
+  58   1      
+  59   1      }
+  60          
+  61          void left()
+  62          {
+  63   1              left_zkb=15;
+  64   1              right_zkb=11;
+  65   1      
+  66   1              leftFor=1;
+  67   1                      
+  68   1      }
+  69          
+  70          void right()
+  71          {
+  72   1              right_zkb=15;
+  73   1              left_zkb=11;
+  74   1      
+  75   1              rightFor=1;
+  76   1      }
+  77                  
+  78          void stop()
+  79          {
+  80   1              enL=0;
+  81   1              enR=0;
+  82   1              leftFor=0;
+  83   1              rightBack=0;
+  84   1              rightFor=0;
+  85   1              leftBack=0;
+  86   1      }
+  87          
+  88          void search()
+  89          {
+  90   1              if(left_red==0&&right_red==0)
+  91   1                      go();
+  92   1              if(left_red==1)
+  93   1                      left();
+  94   1              if(right_red==1)
+  95   1                      right();
+  96   1      }
+  97          
+  98          void main()
+  99          {
+ 100   1              initTime();
+ 101   1              init();
+ 102   1              enR=1                                                                      ;
+ 103   1      
+ 104   1              while(1)
+ 105   1                      search();
+ 106   1      }
+ 107          
+ 108          init0 ()interrupt 1
+ 109          {
+ 110   1              TH0=210;     //写入预置初值（取值1-255，数越大PWM频率越高）
+ 111   1              TL0=210;     //写入预置值 （取值1-255，数越大PWM频率越高）
+ 112   1              i++;j++;
+ 113   1              if(i<left_zkb)
+ 114   1                      enL=1;
+ 115   1              else
+ 116   1                      enL=0;
+ 117   1      
+C51 COMPILER V9.01   RED_LIGHT                                                             11/02/2019 10:45:47 PAGE 3   
+
+ 118   1              if(i==40)
+ 119   1              {
+ 120   2                      i=0;
+ 121   2              }
+ 122   1      
+ 123   1              if(j<right_zkb)
+ 124   1                      enR=1;
+ 125   1              else
+ 126   1                      enR=0;
+ 127   1      
+ 128   1              if(j==40)
+ 129   1              {
+ 130   2                      j=0;
+ 131   2              }
+ 132   1              
+ 133   1      
+ 134   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    249    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      8    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

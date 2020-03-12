@@ -1,0 +1,31 @@
+<html>
+<body>
+<pre>
+<h1>礦ision Build Log</h1>
+<h2>Project:</h2>
+E:\单片机\智能小车\51智能小车\22\实验8\shiyan8.uvproj
+Project File Date:  12/05/2019
+
+<h2>Output:</h2>
+Build target '目标 1'
+assembling STARTUP.A51...
+compiling main.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?DELAY17500US?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?DELAY2500US?MAIN
+Program Size: data=16.1 xdata=0 code=920
+creating hex file from "shiyan8"...
+"shiyan8" - 0 Error(s), 2 Warning(s).
+Build target '目标 1'
+assembling STARTUP.A51...
+compiling main.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?DELAY17500US?MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?DELAY2500US?MAIN
+Program Size: data=16.1 xdata=0 code=920
+creating hex file from "shiyan8"...
+"shiyan8" - 0 Error(s), 2 Warning(s).

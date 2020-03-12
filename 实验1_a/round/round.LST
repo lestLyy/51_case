@@ -1,0 +1,141 @@
+C51 COMPILER V9.01   ROUND                                                                 10/19/2019 10:42:16 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE ROUND
+OBJECT MODULE PLACED IN round.OBJ
+COMPILER INVOKED BY: D:\keil\C51\BIN\C51.EXE round.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          //实现转圈
+   2          
+   3          #include <reg51.h>
+   4          
+   5          typedef unsigned char u8;
+   6          typedef unsigned int  u16;
+   7          
+   8          sbit leftBack=P1^2;
+   9          sbit leftFor=P1^3;
+  10          sbit enL=P1^4;
+  11          sbit enR=P1^5;
+  12          sbit rightFor=P1^6;
+  13          sbit rightBack=P1^7;
+  14          
+  15          void delay_1ms(u16 t)
+  16          {
+  17   1              u16 x,y;
+  18   1              for(x=t;x>0;x--)
+  19   1                      for(y=120;y>0;y--);
+  20   1      }
+  21          
+  22          u8 t;
+  23          u8 time;
+  24          
+  25          void init()
+  26          {
+  27   1              leftBack=0;
+  28   1              leftFor=0;
+  29   1              rightBack=0;
+  30   1              rightFor=0;
+  31   1      }
+  32          
+  33          void initTime()
+  34          {
+  35   1              TMOD = 0x02;   //定时器0，工作模式2，8位定时模式
+  36   1              TH0=210;     //写入预置初值（取值1-255，数越大PWM频率越高）
+  37   1              TL0=210;     //写入预置值 （取值1-255，数越大PWM频率越高）
+  38   1              TR0=1;       //启动定时器
+  39   1              ET0=1;       //允许定时器0中断
+  40   1              EA=1;        //允许总中断
+  41   1              P1=0xff;         //初始化P1，输出端口
+  42   1      
+  43   1      }
+  44          
+  45          int main()
+  46          {
+  47   1              initTime();
+  48   1              while(1);
+  49   1              
+  50   1              
+  51   1      }
+  52          
+  53          time0() interrupt 1
+  54          {
+  55   1              t++;
+C51 COMPILER V9.01   ROUND                                                                 10/19/2019 10:42:16 PAGE 2   
+
+  56   1              if(t==400)
+  57   1              {
+  58   2                      enL=0;
+  59   2                      enR=0;
+  60   2                      t = 0;
+  61   2              }
+  62   1              if(t==35)
+  63   1              {
+  64   2                      enL=0;
+  65   2                      enR=1;
+  66   2                      rightBack=0;
+  67   2                      rightFor=1;
+  68   2              }
+  69   1              
+  70   1              if(t==200)
+  71   1              {
+  72   2      
+  73   2                      enL=1;
+  74   2                      leftBack=0;
+  75   2                      leftFor=1;
+  76   2                      enR=1;
+  77   2                      rightBack=0;
+  78   2                      rightFor=1;
+  79   2              }
+  80   1      
+  81   1      /*      if(t>30)
+  82   1              {
+  83   1                      enL=1;
+  84   1                      leftBack=0;
+  85   1                      leftFor=0;
+  86   1                      enR=1;
+  87   1                      rightBack=0;
+  88   1                      rightFor=0;
+  89   1              }       */
+  90   1      
+  91   1      /*      if(t==250)
+  92   1              {
+  93   1                      enL=0;
+  94   1                      enR=0;
+  95   1              }
+  96   1              if(t==55)
+  97   1              {
+  98   1                      enL=0;
+  99   1                      enR=1;
+ 100   1                      rightBack=0;
+ 101   1                      rightFor=1;
+ 102   1              }
+ 103   1              
+ 104   1              if(t==150)
+ 105   1              {
+ 106   1                      enL=1;
+ 107   1                      leftBack=0;
+ 108   1                      leftFor=1;
+ 109   1                      enR=1;
+ 110   1                      rightBack=0;
+ 111   1                      rightFor=1;
+ 112   1                      t=0;
+ 113   1              }               */
+ 114   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+C51 COMPILER V9.01   ROUND                                                                 10/19/2019 10:42:16 PAGE 3   
+
+   CODE SIZE        =    132    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      2    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
